@@ -85,6 +85,35 @@ func TestOpt_Get(t *testing.T) {
 	})
 }
 
+func TestOpt_Ptr(t *testing.T) {
+	t.Run("with value", func(t *testing.T) {
+		// Arrange
+		expected := TestStruct{
+			Int:    42,
+			String: "Hello, World!",
+		}
+		opt := New(expected)
+
+		// Act
+		actual := opt.Ptr()
+
+		// Assert
+		require.NotNil(t, actual)
+		require.Equal(t, expected, *actual)
+	})
+
+	t.Run("without value", func(t *testing.T) {
+		// Arrange
+		var opt Opt[TestStruct]
+
+		// Act
+		actual := opt.Ptr()
+
+		// Assert
+		require.Nil(t, actual)
+	})
+}
+
 func TestOpt_Set(t *testing.T) {
 	t.Run("with value", func(t *testing.T) {
 		// Arrange

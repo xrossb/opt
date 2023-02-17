@@ -35,6 +35,15 @@ func (o Opt[T]) Get() (value T, ok bool) {
 	return o.Value, o.IsSet
 }
 
+// Ptr turns this Opt into a pointer.
+func (o Opt[T]) Ptr() *T {
+	if o.IsSet {
+		return &o.Value
+	}
+
+	return nil
+}
+
 // Set places a value in the Opt.
 func (o *Opt[T]) Set(value T) {
 	o.Value = value
