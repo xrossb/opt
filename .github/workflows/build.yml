@@ -16,7 +16,8 @@ jobs:
           go-version: 1.19
           cache: true
       - run: go build
-      - run: go test
+      - run: go test -race -coverprofile=coverage.out -covermode=atomic
+      - uses: codecov/codecov-action@v3
   lint:
     runs-on: ubuntu-latest
     steps:
