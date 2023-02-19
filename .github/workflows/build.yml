@@ -18,6 +18,8 @@ jobs:
       - run: go build
       - run: go test -race -coverprofile=coverage.out -covermode=atomic
       - uses: codecov/codecov-action@v3
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
   lint:
     runs-on: ubuntu-latest
     steps:
