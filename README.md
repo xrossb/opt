@@ -7,3 +7,61 @@
 Optional values, sans pointers.
 
 **While the library may be functional, this repo is more of an exercise in writing and publishing a Go module.**
+
+## Install
+
+```sh
+go get github.com/xrossb/opt@latest
+```
+
+## Usage
+
+Make some optional values:
+
+```go
+import "github.com/xrossb/opt"
+
+type UpdateUser struct {
+    SetEmail    opt.Opt[string]
+    SetPassword opt.Opt[string]
+}
+
+update := UpdateUser{
+    SetPassword: opt.New("use_something_stronger"),
+}
+```
+
+Zero-values are empty optional values.
+
+```go
+if email, ok := update.SetEmail.Get(); ok {
+    // we didn't set this above, so this is skipped.
+}
+
+if password, ok := update.SetPassword.Get(); ok {
+    // do something with the value.
+}
+```
+
+Quickly switch back to pointers for serialisation:
+
+```go
+type UpdateUserReq struct {
+    SetEmail    *string
+    SetPassword *string
+}
+
+func NewUpdateUserReq(update UpdateUser) UpdateUserReq {
+    return UpdateUserReq{
+        SetEmail:    update.SetEmail.Ptr(),
+        SetPassword: update.SetPassword.Ptr(),
+    }
+}
+
+func (r UpdateUserReq) ToModel() UpdateUser {
+    return UpdateUser{
+        SetEmail:    opt.Of(r.SetEmail),
+        SetPassword: opt.Of(r.SetPassword),
+    }
+}
+```
