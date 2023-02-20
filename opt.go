@@ -35,6 +35,22 @@ func (o Opt[T]) Get() (value T, ok bool) {
 	return o.Value, o.IsSet
 }
 
+func (o Opt[T]) Or(other Opt[T]) Opt[T] {
+	if o.IsSet {
+		return o
+	}
+
+	return other
+}
+
+func (o Opt[T]) OrValue(value T) T {
+	if o.IsSet {
+		return o.Value
+	}
+
+	return value
+}
+
 // Ptr turns this Opt into a pointer.
 func (o Opt[T]) Ptr() *T {
 	if o.IsSet {

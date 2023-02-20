@@ -139,6 +139,86 @@ func TestOpt_Get(t *testing.T) {
 	})
 }
 
+func TestOpt_Or(t *testing.T) {
+	t.Run("filled value empty other", func(t *testing.T) {
+		// Arrange
+		expected := New(42)
+		opt := New(42)
+		var other Opt[int]
+
+		// Act
+		actual := opt.Or(other)
+
+		// Assert
+		require.Equal(t, expected, actual)
+	})
+
+	t.Run("filled value filled other", func(t *testing.T) {
+		// Arrange
+		expected := New(42)
+		opt := New(42)
+		other := New(24)
+
+		// Act
+		actual := opt.Or(other)
+
+		// Assert
+		require.Equal(t, expected, actual)
+	})
+
+	t.Run("empty value empty other", func(t *testing.T) {
+		// Arrange
+		var expected Opt[int]
+		var opt Opt[int]
+		var other Opt[int]
+
+		// Act
+		actual := opt.Or(other)
+
+		// Assert
+		require.Equal(t, expected, actual)
+	})
+
+	t.Run("empty value filled other", func(t *testing.T) {
+		// Arrange
+		expected := New(24)
+		var opt Opt[int]
+		other := New(24)
+
+		// Act
+		actual := opt.Or(other)
+
+		// Assert
+		require.Equal(t, expected, actual)
+	})
+}
+
+func TestOpt_OrValue(t *testing.T) {
+	t.Run("with value", func(t *testing.T) {
+		// Arrange
+		expected := 42
+		opt := New(42)
+
+		// Act
+		actual := opt.OrValue(24)
+
+		// Assert
+		require.Equal(t, expected, actual)
+	})
+
+	t.Run("without value", func(t *testing.T) {
+		// Arrange
+		expected := 24
+		var opt Opt[int]
+
+		// Act
+		actual := opt.OrValue(24)
+
+		// Assert
+		require.Equal(t, expected, actual)
+	})
+}
+
 func TestOpt_Ptr(t *testing.T) {
 	t.Run("with value", func(t *testing.T) {
 		// Arrange
