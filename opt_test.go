@@ -11,6 +11,60 @@ type TestStruct struct {
 	String string
 }
 
+func TestOpt(t *testing.T) {
+	t.Run("copies are deep", func(t *testing.T) {
+		type Inner struct {
+			Bool bool
+		}
+
+		type Outer struct {
+			Inner Opt[Inner]
+		}
+
+		// Arrange
+		expected := Outer{
+			Inner: New(Inner{}),
+		}
+		actual := Outer{
+			Inner: New(Inner{}),
+		}
+
+		// Act
+		copy := actual
+		copy.Inner.Value.Bool = true
+
+		// Assert
+		require.NotEqual(t, copy, actual)
+		require.Equal(t, expected, actual)
+	})
+
+	t.Run("pointers are not", func(t *testing.T) {
+		type Inner struct {
+			Bool bool
+		}
+
+		type Outer struct {
+			Inner *Inner
+		}
+
+		// Arrange
+		expected := Outer{
+			Inner: &Inner{},
+		}
+		actual := Outer{
+			Inner: &Inner{},
+		}
+
+		// Act
+		copy := actual
+		copy.Inner.Bool = true
+
+		// Assert
+		require.Equal(t, copy, actual)
+		require.NotEqual(t, expected, actual)
+	})
+}
+
 func TestNew(t *testing.T) {
 	// Arrange
 	value := TestStruct{
