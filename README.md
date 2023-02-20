@@ -65,3 +65,43 @@ func (r UpdateUserReq) ToModel() UpdateUser {
     }
 }
 ```
+
+Avoid unwanted referencing when copying:
+
+```go
+type DeepOpt struct {
+    Inner opt.Opt[InnerOpt]
+}
+
+type InnerOpt struct {
+    Message string
+}
+
+original := DeepOpt{
+    Inner: New(InnerOpt{}),
+}
+copy := original
+copy.Inner.Value.Message = ":)"
+
+// original.Inner.Value.Message == ""
+```
+
+As opposed to using pointers:
+
+```go
+type Deep struct {
+    Inner *Inner
+}
+
+type Inner struct {
+    Message string
+}
+
+original := Deep{
+    Inner: &Inner{},
+}
+copy := original
+copy.Inner.Message = ":("
+
+// original.Inner.Message == ":("
+```
