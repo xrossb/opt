@@ -11,7 +11,7 @@ Optional values, sans pointers.
 ## Install
 
 ```sh
-go get github.com/xrossb/opt@latest
+go get -u github.com/xrossb/opt
 ```
 
 ## Usage
