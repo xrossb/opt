@@ -35,6 +35,7 @@ func (o Opt[T]) Get() (value T, ok bool) {
 	return o.Value, o.IsSet
 }
 
+// Or returns this Opt if it contains a value, otherwise it returns the other.
 func (o Opt[T]) Or(other Opt[T]) Opt[T] {
 	if o.IsSet {
 		return o
@@ -43,6 +44,8 @@ func (o Opt[T]) Or(other Opt[T]) Opt[T] {
 	return other
 }
 
+// OrValue returns the value inside this Opt if it contains one, otherwise it
+// returns the argument value.
 func (o Opt[T]) OrValue(value T) T {
 	if o.IsSet {
 		return o.Value
